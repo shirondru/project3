@@ -34,5 +34,41 @@ class Graph:
         representation of the minimum spanning tree of `self.adj_mat` in `self.mst`.
         We highly encourage the use of priority queues in your implementation. See the heapq
         module, particularly the `heapify`, `heappop`, and `heappush` functions.
+        
         """
-        self.mst = 'TODO'
+        num_vertices = test.adj_mat.shape[0] #pick one of the 2 dimensions of the symmetric matrix to get the # of vertices
+        visited_vertices = [0] #instantiate  list of visited vertices with the 0th vertex arbitrarily chosen to be the starting node
+        priority_queue = []
+        heapq.heapify(priority_queue) #turn priority_queue list into a heap
+        
+        MST = np.array([[0 for column in range(num_vertices)] for row in range(num_vertices)]) #instantiate MST filled with 0s that will be updated step-by-step
+        
+        def add_edges_to_pq(pq,start_node):
+            '''
+            pq: priority queue to which outgoing edges will be added
+            start_node: All edges from this node will be found and added to the priority queue
+            
+            This function adds a tuple to the heapq priority queue of the form (weight, start_node, destination_node)
+            
+            Strategy:
+            1. Find neighboring nodes of start node that form an edge
+                1a. This is done by indexing the row correspondng to the start node in the adjacency matrix, and looking for indices in that row where the value >0. 
+                1b. Those indices are the neighbors that form an edge
+            2. Add the tuple containing (weight, start_node index, neighbor index) to the priority queue
+            
+            '''
+            for neighbor in np.argwhere(self.adj_mat[start_node]>0):#find neighboring nodes of start node by finding what other nodes form an edge of weight >0 with the start node. 
+                neighbor = neighbor[0] #index of neighbor in adjacency matrix is returned in a list of length 1 after using np.argwhere. Get the actual value by indexing it out 
+                heapq.heappush(priority_queue,(test.adj_mat[start_node,neighbor],start_node,neighbor)) #add tuple to priority_queue with form (weight,visited_node_idx,neighbor_idx)
+        
+        add_edges_to_pq(priority_queue,visited_vertices[0])#add edges from the start node in visited_vertices to priority_queue
+        
+        while len(visited_vertices) < num_vertices: #while not all vertices have been added to visited_vertices
+            lowest_weight_edge = heapq.heappop(priority_queue)
+            if lowest_weight_edge[2] not in visited_vertices: #3rd element in tuple representing edge is the destination node. Check if it is already in visited_vertices
+                print(lowest_weight_edge)
+                MST[lowest_weight_edge[1],lowest_weight_edge[2]] = lowest_weight_edge[0] #Add weight (0th idx) of lowest weight edge in PQ to MST as an edge visited vertex (1st idx of tuple) and destination node (2nd idx of tuple)
+                visited_vertices.append(lowest_weight_edge[2]) #add destination vertex to visited_vertices
+                add_edges_to_pq(priority_queue,lowest_weight_edge[2]) #add edges from destination vertex to priority_queue
+        self.mst = MST
+        
