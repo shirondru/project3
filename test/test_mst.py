@@ -29,7 +29,7 @@ def check_mst(adj_mat: np.ndarray,
 
     total = 0
     for i in range(mst.shape[0]):
-        for j in range(i,mst.shape[0]): #changed this line so it loops through the upper triangle rather than the lower triangle, as my MST outputs are upper triangular
+        for j in range(i+1): 
             total += mst[i, j]
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
 
@@ -55,6 +55,17 @@ def test_mst_single_cell_data():
     g = Graph(dist_mat)
     g.construct_mst()
     check_mst(g.adj_mat, g.mst, 57.263561605571695)
+
+def test_mst_symmetry():
+    """ 
+    Because the input graph is undirected, the MST adjacency matrix should be symmetric. This also checks that the upper triangle of the MST adjacency matrix
+    has the expected edge weights, as the lower triangle was already validated by `check_mst` and this ensures the two triangles are identical.
+    """
+    file_path = './data/small.csv'
+    g = Graph(file_path)
+    g.construct_mst()
+
+    assert g.mst == g.mst.T, 'Your MST adjacency matrix is not symmetric'
 
 
 def test_mst_student():
