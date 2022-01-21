@@ -36,7 +36,7 @@ class Graph:
         module, particularly the `heapify`, `heappop`, and `heappush` functions.
         
         """
-        num_vertices = test.adj_mat.shape[0] #pick one of the 2 dimensions of the symmetric matrix to get the # of vertices
+        num_vertices = self.adj_mat.shape[0] #pick one of the 2 dimensions of the symmetric matrix to get the # of vertices
         visited_vertices = [0] #instantiate  list of visited vertices with the 0th vertex arbitrarily chosen to be the starting node
         priority_queue = []
         heapq.heapify(priority_queue) #turn priority_queue list into a heap
@@ -59,7 +59,7 @@ class Graph:
             '''
             for neighbor in np.argwhere(self.adj_mat[start_node]>0):#find neighboring nodes of start node by finding what other nodes form an edge of weight >0 with the start node. 
                 neighbor = neighbor[0] #index of neighbor in adjacency matrix is returned in a list of length 1 after using np.argwhere. Get the actual value by indexing it out 
-                heapq.heappush(priority_queue,(test.adj_mat[start_node,neighbor],start_node,neighbor)) #add tuple to priority_queue with form (weight,visited_node_idx,neighbor_idx)
+                heapq.heappush(priority_queue,(self.adj_mat[start_node,neighbor],start_node,neighbor)) #add tuple to priority_queue with form (weight,visited_node_idx,neighbor_idx)
         
         add_edges_to_pq(priority_queue,visited_vertices[0])#add edges from the start node in visited_vertices to priority_queue
         
