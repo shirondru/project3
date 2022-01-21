@@ -28,9 +28,9 @@ def check_mst(adj_mat: np.ndarray,
         return abs(a - b) < allowed_error
 
     total = 0
-for i in range(MST.shape[0]):
-    for j in range(i,MST.shape[0]): #changed this line so it loops through the upper triangle rather than the lower triangle, as my MST outputs are upper triangular
-        total += MST[i, j]
+    for i in range(mst.shape[0]):
+        for j in range(i,mst.shape[0]): #changed this line so it loops through the upper triangle rather than the lower triangle, as my MST outputs are upper triangular
+            total += mst[i, j]
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
 
 
