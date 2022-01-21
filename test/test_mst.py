@@ -60,12 +60,14 @@ def test_mst_symmetry():
     """ 
     Because the input graph is undirected, the MST adjacency matrix should be symmetric. This also checks that the upper triangle of the MST adjacency matrix
     has the expected edge weights, as the lower triangle was already validated by `check_mst` and this ensures the two triangles are identical.
+
+    This test checks for symmetry by checking that each element in the MST adjacency matrix and the same element in the transposed matrix are similar within a very small tolerance
     """
     file_path = './data/small.csv'
     g = Graph(file_path)
     g.construct_mst()
 
-    assert g.mst == g.mst.T, 'Your MST adjacency matrix is not symmetric'
+    assert np.allclose(g.mst, g.mst.T), 'Your MST adjacency matrix is not symmetric'
 
 
 def test_mst_student():
