@@ -57,7 +57,7 @@ def check_mst(adj_mat: np.ndarray,
     for i in range(mst.shape[0]):
         for j in range(i+1):
             if mst[i,j] > 0:
-                assert mst[i,j] == adj_mat[i,j], 'Proposed MST contains an edge not found in the original graph'
+                assert approx_equal(mst[i,j], adj_mat[i,j]), 'Proposed MST contains an edge not found in the original graph'
     #Check that the MST edges actually form a path
 
     #Check MST has correct number of edges
