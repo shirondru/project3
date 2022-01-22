@@ -1,6 +1,7 @@
 import networkx as nx
 from collections import deque
 from typing import Union
+import numpy as np
 
 class BFS:
     """
