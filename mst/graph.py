@@ -21,7 +21,7 @@ class Graph:
         with open(path) as f:
             return np.loadtxt(f, delimiter=',')
 
-    def construct_mst(self):
+    def construct_mst(self,starting_node=0):
         """ Given `self.adj_mat`, the adjacency matrix of a connected undirected graph, implement Prim's 
         algorithm to construct an adjacency matrix encoding the minimum spanning tree of `self.adj_mat`. 
             
@@ -35,9 +35,12 @@ class Graph:
         We highly encourage the use of priority queues in your implementation. See the heapq
         module, particularly the `heapify`, `heappop`, and `heappush` functions.
         
+
+        starting_node: index of adj_mat for node that will be used to start MST construction from. This is included in the method
+        to facilitate a test that a graph with unique edge weights will have a unique MST by constructing an MST from all possible start nodes
         """
         num_vertices = self.adj_mat.shape[0] #pick one of the 2 dimensions of the symmetric matrix to get the # of vertices
-        visited_vertices = [0] #instantiate  list of visited vertices with the 0th vertex arbitrarily chosen to be the starting node
+        visited_vertices = [starting_node] #instantiate  list of visited vertices with the 0th vertex arbitrarily chosen to be the starting node
         priority_queue = []
         heapq.heapify(priority_queue) #turn priority_queue list into a heap
 
