@@ -1,8 +1,9 @@
 # write tests for bfs
 import pytest
 import numpy as np
-from mst import Graph
+from mst import Graph, BFS
 from sklearn.metrics import pairwise_distances
+import networkx as nx
 
 
 def check_mst(adj_mat: np.ndarray, 
@@ -37,8 +38,16 @@ def check_mst(adj_mat: np.ndarray,
         each element in the lower triangle of the MST. If an edge exists (the element has weight > 0) between those nodes, check the edge of the same weight
         also exists between the same nodes in adj_mat. Because we have also tested for symmetry, only checking the lower triangle is sufficient.
         
-        3) A tree such as an MST with n nodes will have n-1 edges. Test that is the case by counting the number of nodes in the lower triangular
+        3) Check MST has expected number of edges
+        A tree such as an MST with n nodes will have n-1 edges. Test that is the case by counting the number of nodes in the lower triangular
         portion of the MST. Beacuse we also checked for symmetry, only checking the lower triangle is sufficient.
+
+        4) Check the MST is connected
+        MSTs are always connected, so this test tests the proposed MST is connected. It does this by importing the BFS class from project 2. 
+        This BFS class was adapted for this project to perform BFS on undirected graphs (rather than directed graphs like in project 2). Because the MST
+        is an undirected graph, performing BFS starting at any node will cause traversal of the whole tree. If the MST is connected, then every node will be traversed.
+        Therefore, running BFS --starting at an arbitrary node -- will cause traversal of the graph and should return every node in the graph in the list of nodes traversed.
+        Test that is the case by asserting the length of the list of bfs-traversed nodes is the same as the number of nodes in the graph
     """
     def approx_equal(a, b):
         return abs(a - b) < allowed_error
@@ -61,7 +70,7 @@ def check_mst(adj_mat: np.ndarray,
             if mst[i,j] > 0:
                 assert approx_equal(mst[i,j], adj_mat[i,j]), 'Proposed MST contains an edge not found in the original graph'
     
-    #3) Check MST has correct number of edges
+    #3) Check MST has expected number of edges
     num_edges = 0
     num_nodes = adj_mat.shape[0]
     for i in range(mst.shape[0]):
@@ -70,10 +79,13 @@ def check_mst(adj_mat: np.ndarray,
                 num_edges +=1 #add another edge to the tally
     assert num_edges == num_nodes - 1, "Proposed MST does not contain expected n-1 # of nodes"
 
+    #4) Check if MST is connected 
+    mst_bfs = BFS(mst) #instantiate BFS class from project2 with mst matrix. the BFS class was adapted for this project to create an undirected graph (directed graphs were used in project 2)
+    bfs_traversal_list = mst_bfs.bfs(start=0) #arbitrarily choose 0th node to start traversal from. Doesn't matter where I start bfs because graph is undirected so it will always traverse the whole thing
+    assert len(bfs_traversal_list) == len(num_nodes) #check that the number of nodes traversed via bfs is the same as the number of nodes in the graph, demonstrating connectivity
+
+
     #Check that the MST edges actually form a path
-
-
-    #Check if MST is connected
 
     #check there are no cycles
 
