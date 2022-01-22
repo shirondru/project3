@@ -42,8 +42,8 @@ def check_mst(adj_mat: np.ndarray,
     assert approx_equal(total, expected_weight), 'Proposed MST has incorrect expected weight'
 
 
-    #Check proposed MST matrix is symmetric
-    assert np.allclose(g.mst, g.mst.T), 'Proposed MST adjacency matrix is not symmetric'
+    #1) Check proposed MST matrix is symmetric
+    assert np.allclose(mst, mst.T), 'Proposed MST adjacency matrix is not symmetric'
 
 
 
