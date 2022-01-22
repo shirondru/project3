@@ -35,8 +35,10 @@ def check_mst(adj_mat: np.ndarray,
         2) Check all edges in MST are also in adj_mat
         The MST of adj_mat should not contain any edges that were not in adj_mat. This test tests that is the case by iterating through
         each element in the lower triangle of the MST. If an edge exists (the element has weight > 0) between those nodes, check the edge of the same weight
-        also exists between the same nodes in adj_mat. Because we have also tested for symmetry, only checking the lower triangle is necessary.
-
+        also exists between the same nodes in adj_mat. Because we have also tested for symmetry, only checking the lower triangle is sufficient.
+        
+        3) A tree such as an MST with n nodes will have n-1 edges. Test that is the case by counting the number of nodes in the lower triangular
+        portion of the MST. Beacuse we also checked for symmetry, only checking the lower triangle is sufficient.
     """
     def approx_equal(a, b):
         return abs(a - b) < allowed_error
@@ -58,9 +60,19 @@ def check_mst(adj_mat: np.ndarray,
         for j in range(i+1):
             if mst[i,j] > 0:
                 assert approx_equal(mst[i,j], adj_mat[i,j]), 'Proposed MST contains an edge not found in the original graph'
+    
+    #3) Check MST has correct number of edges
+    num_edges = 0
+    num_nodes = adj_mat.shape[0]
+    for i in range(mst.shape[0]):
+        for j in range(i+1): #iterate through elements in lower triangle of MST
+            if mst[i,j] > 0: #if element is an edge (i.e, weight > 0)
+                num_edges +=1 #add another edge to the tally
+    assert num_edges == num_nodes - 1, "Proposed MST does not contain expected n-1 # of nodes"
+
     #Check that the MST edges actually form a path
 
-    #Check MST has correct number of edges
+
     #Check if MST is connected
 
     #check there are no cycles
