@@ -82,7 +82,7 @@ def check_mst(adj_mat: np.ndarray,
     #4) Check if MST is connected 
     mst_bfs = BFS(mst) #instantiate BFS class from project2 with mst matrix. the BFS class was adapted for this project to create an undirected graph (directed graphs were used in project 2)
     bfs_traversal_list = mst_bfs.bfs(start=0) #arbitrarily choose 0th node to start traversal from. Doesn't matter where I start bfs because graph is undirected so it will always traverse the whole thing
-    assert len(bfs_traversal_list) == len(num_nodes) #check that the number of nodes traversed via bfs is the same as the number of nodes in the graph, demonstrating connectivity
+    assert len(bfs_traversal_list) == num_nodes #check that the number of nodes traversed via bfs is the same as the number of nodes in the graph, demonstrating connectivity
 
 
     #Check that the MST edges actually form a path
