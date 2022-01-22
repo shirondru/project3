@@ -31,6 +31,12 @@ def check_mst(adj_mat: np.ndarray,
         Because the input graph is undirected, the MST adjacency matrix should be symmetric. This also checks that the upper triangle of the MST adjacency matrix
         has the expected edge weights, as the lower triangle was already validated by `check_mst` and this ensures the two triangles are identical.
         This test checks for symmetry by checking that each element in the MST adjacency matrix and the same element in the transposed matrix are similar within a very small tolerance
+        
+        2) Check all edges in MST are also in adj_mat
+        The MST of adj_mat should not contain any edges that were not in adj_mat. This test tests that is the case by iterating through
+        each element in the lower triangle of the MST. If an edge exists (the element has weight > 0) between those nodes, check the edge of the same weight
+        also exists between the same nodes in adj_mat. Because we have also tested for symmetry, only checking the lower triangle is necessary.
+
     """
     def approx_equal(a, b):
         return abs(a - b) < allowed_error
@@ -47,8 +53,11 @@ def check_mst(adj_mat: np.ndarray,
 
 
 
-    #Check that all of the edges in MST are also in the adj_mat
-
+    #2) Check that all of the edges in MST are also in the adj_mat
+    for i in range(mst.shape[0]):
+        for j in range(i+1):
+            if mst[i,j] > 0:
+                assert mst[i,j] == adj_mat[i,j] 'Proposed MST contains an edge not found in the original graph'
     #Check that the MST edges actually form a path
 
     #Check MST has correct number of edges
